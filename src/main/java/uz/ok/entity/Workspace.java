@@ -7,21 +7,26 @@ import lombok.NoArgsConstructor;
 import uz.ok.entity.template.AbsUUIDEntity;
 
 import javax.persistence.Entity;
-
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Attachment extends AbsUUIDEntity {
+public class Workspace extends AbsUUIDEntity {
 
     private String name;
 
-    private String original_name;
+    private String color;
 
-    private String size;
+    @ManyToMany
+    private List<User> owner_id;
 
-    private String content_type;
+    private String initial_letter;
 
+    @OneToOne
+    private Attachment avatar;
 }

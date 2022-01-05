@@ -7,21 +7,21 @@ import lombok.NoArgsConstructor;
 import uz.ok.entity.template.AbsUUIDEntity;
 
 import javax.persistence.Entity;
-
+import javax.persistence.OneToOne;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Attachment extends AbsUUIDEntity {
+@Entity
+public class Icon extends AbsUUIDEntity {
 
-    private String name;
+    @OneToOne
+    private Attachment avatar;
 
-    private String original_name;
+    private String color;
 
-    private String size;
+    private String initial_letter;
 
-    private String content_type;
-
+    private String icon;
 }
