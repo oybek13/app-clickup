@@ -4,22 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import uz.ok.entity.enums.WorkspaceRoleName;
 import uz.ok.entity.template.AbsUUIDEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Workspace_Role extends AbsUUIDEntity {
+public class WorkspaceRole extends AbsUUIDEntity {
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Workspace workspace;
 
+    @Column(nullable = false)
     private String name;
 
-    private String extends_role;
+    @Enumerated(EnumType.STRING)
+    private WorkspaceRoleName extendsRole;
+
 }

@@ -4,29 +4,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import uz.ok.entity.template.AbsUUIDEntity;
+import uz.ok.entity.template.AbsLongEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import java.util.List;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Workspace extends AbsUUIDEntity {
+public class Workspace extends AbsLongEntity {
 
+    @Column(nullable = false)
     private String name;
 
     private String color;
 
-    @ManyToMany
-    private List<User> owner_id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User owner;
 
-    private String initial_letter;
+    @Column(nullable = false)
+    private String initialLetter;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Attachment avatar;
 }

@@ -20,7 +20,7 @@ public class Attachment extends AbsUUIDEntity {
 
     private String original_name;
 
-    private String size;
+    private Long size;
 
     private String content_type;
 
