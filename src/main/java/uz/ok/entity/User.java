@@ -44,6 +44,8 @@ public class User extends AbsUUIDEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private SystemRoleName systemRoleName;
 
+    private String emailCode;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(this.systemRoleName.name());
@@ -73,5 +75,12 @@ public class User extends AbsUUIDEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public User(String fullName, String email, String password, SystemRoleName systemRoleName) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.systemRoleName = systemRoleName;
     }
 }
