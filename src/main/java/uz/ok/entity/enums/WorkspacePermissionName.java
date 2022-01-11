@@ -100,6 +100,18 @@ public enum WorkspacePermissionName {
     private String description;
     private List<WorkspaceRoleName> workspaceRoleNames;
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<WorkspaceRoleName> getWorkspaceRoleNames() {
+        return workspaceRoleNames;
+    }
+
     WorkspacePermissionName(String name, String description, List<WorkspaceRoleName> workspaceRoleNames) {
         this.name = name;
         this.description = description;
