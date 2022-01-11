@@ -36,15 +36,16 @@ public class User extends AbsUUIDEntity implements UserDetails {
     @OneToOne(fetch = FetchType.LAZY)
     private Attachment avatar;
 
+    @Enumerated(EnumType.STRING)
+    private SystemRoleName systemRoleName;
+
+    private String emailCode;
+
     private boolean enabled;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
 
-    @Enumerated(EnumType.STRING)
-    private SystemRoleName systemRoleName;
-
-    private String emailCode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

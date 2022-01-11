@@ -70,6 +70,13 @@ public class WorkspaceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    @PutMapping("/join")
+    public ResponseEntity<?> joinToWorkspace(@RequestParam Long id,
+                                             @CurrentUser User user){
+        ApiResponse apiResponse = workspaceService.joinToWorkspace(id, user);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
 
 
 }

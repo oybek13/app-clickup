@@ -16,6 +16,7 @@ import uz.ok.service.impl.WorkspaceService;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -159,4 +160,15 @@ public class WorkspaceServiceImpl implements WorkspaceService {
       return new ApiResponse("Successful", true);
     }
 
+    @Override
+    public ApiResponse joinToWorkspace(Long id, User user) {
+        Optional<WorkspaceUser> optionalWorkspaceUser = iWorkspaceUserRepo.findByWorkspaceIdAndUserId(id, user.getId());
+        if (optionalWorkspaceUser.isPresent()){
+            WorkspaceUser workspaceUser = optionalWorkspaceUser.get();
+            workspaceUser.setDateJoined(new Timestamp(System.currentTimeMillis()));
+            iWorkspaceUserRepo.save(workspaceUser);
+            return new ApiResponse("Success", true);
+        }
+        return new ApiResponse("Error", false);
+    }
 }
