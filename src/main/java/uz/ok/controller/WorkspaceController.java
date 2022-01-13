@@ -3,7 +3,7 @@ package uz.ok.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.ok.dto.request.MemberDto;
+import uz.ok.dto.response.MemberDto;
 import uz.ok.dto.request.WorkspaceDto;
 import uz.ok.dto.response.ApiResponse;
 import uz.ok.entity.User;
@@ -58,11 +58,6 @@ public class WorkspaceController {
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 
-    @GetMapping
-    public List<Workspace> getAllWorkspace(){
-        return workspaceService.getAllWorkspaces();
-    }
-
     @PostMapping("/addOrEditOrRemove/{id}")
     public ResponseEntity<?> addOrEditOrRemoveWorkspace(@PathVariable Long id,
                                                         @RequestBody MemberDto memberDto){
@@ -77,6 +72,17 @@ public class WorkspaceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    @GetMapping("/member/{id}")
+    public ResponseEntity<?> getMemberAndGuest(@PathVariable Long id){
+        List<MemberDto> members = workspaceService.getMemberAndGuest(id);
+        return ResponseEntity.ok(members);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getMyWorkspaces(@CurrentUser User user){
+        List<WorkspaceDto> workspaces = workspaceService.getMyWorkspaces(user);
+        return ResponseEntity.ok(workspaces);
+    }
 
 
 }

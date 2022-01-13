@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import uz.ok.dao.*;
-import uz.ok.dto.request.MemberDto;
+import uz.ok.dto.response.MemberDto;
 import uz.ok.dto.request.WorkspaceDto;
 import uz.ok.dto.response.ApiResponse;
 import uz.ok.entity.*;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -132,10 +133,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
     }
 
-    @Override
-    public List<Workspace> getAllWorkspaces() {
-        return iWorkspaceRepo.findAll();
-    }
 
     @Override
     public ApiResponse addOrEditOrRemoveWorkspace(Long id, MemberDto memberDto) {
@@ -170,5 +167,45 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             return new ApiResponse("Success", true);
         }
         return new ApiResponse("Error", false);
+    }
+
+    @Override
+    public List<MemberDto> getMemberAndGuest(Long id) {
+        List<WorkspaceUser> workspaceUsers = iWorkspaceUserRepo.findAllByWorkspaceId(id);
+        /* List<MemberDto> members = new ArrayList<>();
+        for (WorkspaceUser workspaceUser : workspaceUsers) {
+            MemberDto memberDto = mapWorkspaceUserToMemberDto(workspaceUser);
+            members.add(memberDto);
+        }
+        return members; */
+        return workspaceUsers.stream().map(this::mapWorkspaceUserToMemberDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WorkspaceDto> getMyWorkspaces(User user) {
+        List<WorkspaceUser> workspaceUsers = iWorkspaceUserRepo.findAllByUserId(user.getId());
+        return workspaceUsers.stream().map(workspaceUser
+                -> mapWorkspaceUserToWorkspaceDto(workspaceUser.getWorkspace())).collect(Collectors.toList());
+    }
+
+    public WorkspaceDto mapWorkspaceUserToWorkspaceDto(Workspace workspace){
+        WorkspaceDto workspaceDto = new WorkspaceDto();
+        workspaceDto.setId(workspace.getId());
+        workspaceDto.setName(workspace.getName());
+        workspaceDto.setInitialLetter(workspace.getInitialLetter());
+        workspaceDto.setAvatarId(workspace.getAvatar() == null ? null : workspace.getAvatar().getId());
+        workspaceDto.setColor(workspace.getColor());
+        return workspaceDto;
+    }
+
+
+    public MemberDto mapWorkspaceUserToMemberDto(WorkspaceUser workspaceUser){
+        MemberDto memberDto = new MemberDto();
+        memberDto.setId(workspaceUser.getUser().getId());
+        memberDto.setFullName(workspaceUser.getUser().getFullName());
+        memberDto.setEmail(workspaceUser.getUser().getEmail());
+        memberDto.setRoleName(workspaceUser.getWorkspaceRole().getName());
+        memberDto.setLastActive(workspaceUser.getUser().getLastActiveTime());
+        return memberDto;
     }
 }

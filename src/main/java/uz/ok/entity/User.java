@@ -11,6 +11,7 @@ import uz.ok.entity.enums.SystemRoleName;
 import uz.ok.entity.template.AbsUUIDEntity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -40,6 +41,8 @@ public class User extends AbsUUIDEntity implements UserDetails {
     private SystemRoleName systemRoleName;
 
     private String emailCode;
+
+    private Timestamp lastActiveTime;
 
     private boolean enabled;
     private boolean accountNonExpired;

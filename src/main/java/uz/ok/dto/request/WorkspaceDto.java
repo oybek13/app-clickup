@@ -8,6 +8,8 @@ import java.util.UUID;
 @Data
 public class WorkspaceDto {
 
+    private Long id;
+
     @NotNull
     private String name;
 
@@ -15,4 +17,8 @@ public class WorkspaceDto {
     private String color;
 
     private UUID avatarId;
+
+    private UUID ownerId;
+
+    private String initialLetter;
 }

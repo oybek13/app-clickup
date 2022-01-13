@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uz.ok.entity.WorkspaceUser;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,4 +17,8 @@ public interface IWorkspaceUserRepo extends JpaRepository<WorkspaceUser, UUID> {
     @Transactional
     @Modifying
     void deleteByWorkspaceIdAndUserId(Long workspace_id, UUID user_id);
+
+    List<WorkspaceUser> findAllByWorkspaceId(Long workspaceId);
+
+    List<WorkspaceUser> findAllByUserId(UUID user_id);
 }
