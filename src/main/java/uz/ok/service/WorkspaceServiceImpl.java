@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import uz.ok.dao.*;
+import uz.ok.dto.request.WorkspaceRoleDto;
 import uz.ok.dto.response.MemberDto;
 import uz.ok.dto.request.WorkspaceDto;
 import uz.ok.dto.response.ApiResponse;
@@ -186,6 +187,26 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         List<WorkspaceUser> workspaceUsers = iWorkspaceUserRepo.findAllByUserId(user.getId());
         return workspaceUsers.stream().map(workspaceUser
                 -> mapWorkspaceUserToWorkspaceDto(workspaceUser.getWorkspace())).collect(Collectors.toList());
+    }
+
+    @Override
+    public ApiResponse addOrRemovePermissionToRole(WorkspaceRoleDto workspaceRoleDto) {
+        WorkspaceRole workspaceRole = iWorkspaceRoleRepo.findById(workspaceRoleDto.getId()).orElseThrow(() -> new ResourceNotFoundException("workspaceRole"));
+        Optional<WorkspacePermission> optionalWorkspacePermission = iWorkspacePermissionRepo.findByWorkspaceRoleIdAndPermission(workspaceRole.getId(), workspaceRoleDto.getPermissionName());
+        if (workspaceRoleDto.getAddType().equals(AddType.ADD)){
+            if (optionalWorkspacePermission.isPresent())
+                return new ApiResponse("Already exists, no need to add again!", false);
+            WorkspacePermission workspacePermission = new WorkspacePermission(workspaceRole, workspaceRoleDto.getPermissionName());
+            iWorkspacePermissionRepo.save(workspacePermission);
+            return new ApiResponse("Successfully added!", true);
+        }else if (workspaceRoleDto.getAddType().equals(AddType.REMOVE)){
+            if (optionalWorkspacePermission.isPresent()){
+                iWorkspacePermissionRepo.delete(optionalWorkspacePermission.get());
+                return new ApiResponse("Successfully deleted!", true);
+            }
+            return new ApiResponse("Sorry this object not found!", false);
+        }
+        return new ApiResponse("This request not found!", false);
     }
 
     public WorkspaceDto mapWorkspaceUserToWorkspaceDto(Workspace workspace){

@@ -3,6 +3,7 @@ package uz.ok.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.ok.dto.request.WorkspaceRoleDto;
 import uz.ok.dto.response.MemberDto;
 import uz.ok.dto.request.WorkspaceDto;
 import uz.ok.dto.response.ApiResponse;
@@ -78,10 +79,16 @@ public class WorkspaceController {
         return ResponseEntity.ok(members);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getMyWorkspaces(@CurrentUser User user){
         List<WorkspaceDto> workspaces = workspaceService.getMyWorkspaces(user);
         return ResponseEntity.ok(workspaces);
+    }
+
+    @PutMapping("/addOrRemovePermission")
+    public ResponseEntity<?> addOrRemovePermissionToRole(@RequestBody WorkspaceRoleDto workspaceRoleDto){
+        ApiResponse apiResponse = workspaceService.addOrRemovePermissionToRole(workspaceRoleDto);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 
 

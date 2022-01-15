@@ -1,5 +1,6 @@
 package uz.ok.service.impl;
 
+import uz.ok.dto.request.WorkspaceRoleDto;
 import uz.ok.dto.response.MemberDto;
 import uz.ok.dto.request.WorkspaceDto;
 import uz.ok.dto.response.ApiResponse;
@@ -28,5 +29,7 @@ public interface WorkspaceService {
 
     List<WorkspaceDto> getMyWorkspaces(User user);
 
+
+    ApiResponse addOrRemovePermissionToRole(WorkspaceRoleDto workspaceRoleDto);
 
 }
